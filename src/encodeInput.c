@@ -7,6 +7,46 @@ int main(int argc,char*argv[]){
 	FILE *fout=NULL;
 	char buffer[1024];
 	int totalBytes;
+	processArgument(argc,argv,&inputFileName,&outputFileName,srecMode);
+	if(inputFileName !=NULL){
+		fin =fopen(inputFileName,"rb");
+		if(!fin){
+			perror("ERROR:Can't open input file");
+			return 1;
+		}
+	}else{
+		fin = stdin;
+	}
+	if(outputFileName!=NULL){
+		fout = fopen(outputFileName,"w");
+		if(!fout){
+			perror("ERROR:Can't open output file");
+			if(fclose(fin)!=0){// close the input file to prevent resource leaks
+			perror("ERROR: Can't close input file");
+			exit(1);
+			}
+			return 1;
+		}
+	}else{
+		fout = stdout;
+	}
+	totalBytes=readFile(fin,buffer,sizeof(buffer));
+
+	if(srecMode==1){
+
+	}
+	if(fin !=stdin){
+		if(fclose(fin)!=0){
+		perror("ERROR:Can't close input file");
+		return;
+		}
+	}
+	if(fout !=stdout){
+		if(fclose(fout)!= 0){
+		perror("ERROR:Can't close output file");
+		return;
+		}
+	}
 	return 0;
 }
 
@@ -50,4 +90,19 @@ void printUsage(){
 	printf("Usage: encodeInput -o<<outputFileName>>  take the piped standard input and format it into Assemble format and write it inside output file\n");
 	printf("Usage: encodeInput -srec -i<<inputFileName>> Convert input file to S-Record format\n");
 	printf("Usage: ls -l | encodeInput -o<<outputFileName>> -srec  take the piped standard input and format it into S-Record format and write it inside output file\n");
+}
+
+int readFile(FILE *fin,char *buffer,int totalBytes,int bufferSize){
+	while(!feof(fin)){
+		int readBytes =fread(&buffer[totalBytes],1,bufferSize,fin);
+		if(readBytes<=0){
+			break;
+		}
+		totalBytes+=readBytes;
+
+		if(totalBytes >= bufferSize){
+			break;
+		}
+	}
+	
 }
