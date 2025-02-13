@@ -4,5 +4,5 @@
 
 #pragma warning(disable:4996)
 #define NAME "MINH"
-generateSrec(FILE *fout,unsigned char* data,int totalBytes);
+void generateSrec(FILE *fout,unsigned char* data,int totalBytes);
 static unsigned char checkSum(unsigned char* data, int count) ;

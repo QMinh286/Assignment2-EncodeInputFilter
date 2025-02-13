@@ -1,6 +1,6 @@
 #include "../inc/SREC.h"
 
-generateSrec(FILE *fout,unsigned char* data,int totalBytes){
+void generateSrec(FILE *fout,unsigned char* data,int totalBytes){
     int address =0;
     int count =0;
     int nameLen = strlen(NAME);
@@ -38,7 +38,7 @@ generateSrec(FILE *fout,unsigned char* data,int totalBytes){
 
     // Write S9 (end) record
     fprintf(fout, "S9030000FC\n");
-
+}
 static unsigned char checkSum(unsigned char* data, int count) {
     unsigned int sum = 0;
     for (int i = 0; i < count; i++) {

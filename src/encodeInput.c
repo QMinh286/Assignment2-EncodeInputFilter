@@ -9,7 +9,7 @@ int main(int argc,char*argv[]){
 	FILE *fout=NULL;
 	char buffer[1024];
 	int totalBytes;
-	processArgument(argc,argv,&inputFileName,&outputFileName,srecMode);
+	processArgument(argc,argv,&inputFileName,&outputFileName,&srecMode);
 	if(inputFileName !=NULL){
 		fin =fopen(inputFileName,"rb");
 		if(!fin){
@@ -32,7 +32,7 @@ int main(int argc,char*argv[]){
 	}else{
 		fout = stdout;
 	}
-	totalBytes=readFile(fin,buffer,sizeof(buffer));
+	totalBytes=readFile(fin,buffer,totalBytes,sizeof(buffer));
 
 	if(srecMode==1){
 		generateSrec(fout,buffer.totalBytes);

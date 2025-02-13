@@ -3,4 +3,4 @@
 #include<stdlib.h>
 
 #pragma warning(disable:4996)
-void generateAsm(FILE *fin, FILE *fout);
+void writeAssemblyOutput(FILE* fout, unsigned char* data, int count);
