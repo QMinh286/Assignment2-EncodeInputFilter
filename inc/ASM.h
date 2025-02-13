@@ -3,4 +3,4 @@
 #include<stdlib.h>
 
 #pragma warning(disable:4996)
-void generate_asm(FILE *fin, FILE *fout);
+void generateAsm(FILE *fin, FILE *fout);

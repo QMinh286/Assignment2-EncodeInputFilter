@@ -1,5 +1,5 @@
 #include "../inc/ASM.h"
-void generate_asm(FILE *fin, FILE *fout) {
+void generateAsm(FILE *fin, FILE *fout) {
     char buffer[16];
     int bytes_read;
 

@@ -1,4 +1,6 @@
 #include "../inc/encodeInput.h"
+#include "../inc/ASM.h"
+#include "../inc/SREC.h"
 int main(int argc,char*argv[]){
 	char *inputFileName=NULL;
 	char *outputFileName=NULL;
@@ -33,7 +35,13 @@ int main(int argc,char*argv[]){
 	totalBytes=readFile(fin,buffer,sizeof(buffer));
 
 	if(srecMode==1){
-
+		generateSrec(fout,buffer.totalBytes);
+	}else{
+		for (i = 0; i < totalBytes; i += 16) {
+        int count = (totalBytes - i < 16) ? 
+                    (totalBytes - i) : 16;
+					generateAsm(fout,&buffer[i],count);
+					}
 	}
 	if(fin !=stdin){
 		if(fclose(fin)!=0){
@@ -81,6 +89,12 @@ void processArgument(int argc,char*argv[],char **inputFileName,char **outputFile
 			exit(1);
 		}
 	}
+	if (*inputFileName && !*outputFileName) {
+        char *autoFileName = malloc(strlen(*inputFile) + 6);  
+        strcpy(autoFileName, *inputFileName);
+        strcat(autoFileName, *srecFormat ? ".srec" : ".asm");
+        *outputFileName = autoFileName;
+    }
 }
 
 void printUsage(){
