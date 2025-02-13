@@ -1,3 +1,13 @@
+//
+//FILE        SREC.h
+//PROJECT     cryptoMagic Utility
+//PROGRAMMER  Vu Quang Minh-8905836
+//DATE        12/2/2025
+//DESCRIPTION This header file contains function prototypes and definitions for
+//              generating Motorola S-Record format output. S-Records are used in
+//              embedded development for transferring data between systems and
+//              programming EPROM devices.
+//
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>

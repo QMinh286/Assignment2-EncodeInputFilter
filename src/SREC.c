@@ -1,5 +1,16 @@
+// FILE        : SREC.c
+// PROJECT     : encodeInput
+// PROGRAMMER  : Vu Quang Minh - 8905836
+// FIRST VERSION :12/2/2025
+// DESCRIPTION : This file contains the implementation of functions that
+//               generate Motorola S-Record formatted output from binary data.
 #include "../inc/SREC.h"
-
+// FUNCTION    : generateSrec
+// DESCRIPTION : Generates an S-Record formatted output from binary data
+// PARAMETERS  : FILE *fout - Output file pointer where the S-Record is written
+//               unsigned char *data - Input binary data buffer
+//               int totalBytes - Total number of bytes in the input buffer
+// RETURN      : NONE
 void generateSrec(FILE *fout,unsigned char* data,int totalBytes){
     int address =0;
     int count =0;
@@ -12,33 +23,34 @@ void generateSrec(FILE *fout,unsigned char* data,int totalBytes){
     fprintf(fout,"%02X",headerSum);
     fprintf(fout,"\n");
 
-    for (i = 0; i < totalBytes; i += 16) {
+    for (int i = 0; i < totalBytes; i += 16) {
         int count = (totalBytes - i < 16) ? 
                     (totalBytes - i) : 16;
         
-        // Calculate record length (count + 2 address bytes + 1 checksum byte)
+        
         fprintf(fout, "S1%02X%04X", count + 3, address);
         
-        // Write data bytes
-         sum = 0;  // Reset sum for checksum calculation
+        unsigned int sum = 0;  
         for (int j = 0; j < count; j++) {
             fprintf(fout, "%02X", data[i + j]);
             sum += data[i + j];
         }
         
-        // Print checksum
         fprintf(fout, "%02X\n", ~(sum & 0xFF));
         
         address += count;
         count++;
     }
 
-    // Write S5 (record count) record
     fprintf(fout, "S503%04X%02X\n", count, ~(count & 0xFF));
 
-    // Write S9 (end) record
     fprintf(fout, "S9030000FC\n");
 }
+// FUNCTION    : checkSum
+// DESCRIPTION : Computes the checksum for a given data buffer
+// PARAMETERS  : unsigned char *data - Pointer to the data buffer
+//               int count - Number of bytes in the buffer
+// RETURN      : unsigned char - Computed checksum
 static unsigned char checkSum(unsigned char* data, int count) {
     unsigned int sum = 0;
     for (int i = 0; i < count; i++) {
